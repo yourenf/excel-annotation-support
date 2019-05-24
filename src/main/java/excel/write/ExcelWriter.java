@@ -3,11 +3,10 @@ package excel.write;
 import excel.write.usermodel.FnSheet;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
-public interface ExcelWriter {
+public interface ExcelWriter extends AutoCloseable {
 
   void initHeader(Consumer<FnSheet> header);
 
@@ -15,7 +14,7 @@ public interface ExcelWriter {
    * @param items
    * @return rowNum
    */
-  int write(Object... items) throws IOException;
+  int write(Object... items);
 
   /**
    * Unsafe merge
@@ -26,6 +25,12 @@ public interface ExcelWriter {
    * @param endColumnOffset
    */
   void addMergedRegion(int startRowOffset, int endRowOffset, int startColumnOffset, int endColumnOffset);
+
+  /**
+   * 关闭workbook
+   */
+  @Override
+  void close();
 
   /**
    * @return

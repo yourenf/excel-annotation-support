@@ -37,7 +37,7 @@ public class ExcelWriterImpl implements ExcelWriter {
   }
 
   @Override
-  public int write(Object... items) throws IOException {
+  public int write(Object... items) {
     if (Objects.isNull(header)) {
       throw new ExcelException("未初始化header");
     }
@@ -76,25 +76,24 @@ public class ExcelWriterImpl implements ExcelWriter {
     fnSheet = new FnSheetImpl(sheet);
     header.accept(fnSheet);
     if (fnSheet.offset() >= config.getLimit()) {
-      try {
-        workbook.close();
-      } catch (IOException e) {
-      }
       throw new IllegalArgumentException("limit 参数配置太小");
     }
   }
 
-  private void flush() throws IOException {
+  private void flush() {
     if (config.getWriteType().isSingleSheet()) {
       File file = config.getNewFile();
       try (OutputStream os = new FileOutputStream(file)) {
         workbook.write(os);
         workbook.close();
+      } catch (IOException e) {
+        throw new ExcelException(e);
       }
     }
   }
 
-  private void close() {
+  @Override
+  public void close() {
     if (closed) {
       return;
     }
