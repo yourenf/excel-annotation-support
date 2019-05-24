@@ -16,7 +16,7 @@ public abstract class AbstractCommonPath {
   @Before
   public void initDate() throws IOException, URISyntaxException {
     ClassLoader classLoader = getClass().getClassLoader();
-    URI fn = classLoader.getResource("fn").toURI();
+    URI fn = classLoader.getResource("excel").toURI();
     Path resource = Paths.get(fn).getParent();
     System.out.println(resource);
     String dir = Paths.get(resource.toString(), "test-file").toString();
