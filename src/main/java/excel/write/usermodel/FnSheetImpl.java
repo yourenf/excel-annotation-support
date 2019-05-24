@@ -19,6 +19,7 @@ public final class FnSheetImpl implements FnSheet {
   private Sheet sheet;
   private List<RowWriter<?>> writers;
   private int height;
+  private boolean done = false;
 
   public FnSheetImpl(Sheet sheet) {
     this.sheet = sheet;
@@ -90,11 +91,22 @@ public final class FnSheetImpl implements FnSheet {
     writers.add(writer);
   }
 
+  private void initWriter() {
+    if (done) {
+      return;
+    }
+    done = true;
+    if (writers.isEmpty()) {
+      throw new IllegalArgumentException("未添加header");
+    }
+    for (RowWriter<?> writer : writers) {
+      writer.init(sheet.getWorkbook(), height);
+    }
+  }
+
   @Override
   public void writeHeader() {
-    if (writers.isEmpty()) {
-      throw new IllegalArgumentException("未初始化header");
-    }
+    initWriter();
     int rowOffset = offset;
     int colOffset = 0;
     List<FnRow> rows = allocateFnRow(height);
@@ -106,25 +118,9 @@ public final class FnSheetImpl implements FnSheet {
     }
   }
 
-
-  /**
-   * 如果header type 分别是A,B,C
-   * item的值a,b,c
-   * 1、 a,b,c
-   * 2、 a,b
-   * 3、 a
-   * 4、 null,b,c
-   * 5、 a,null,c
-   * 6、 a,null,null
-   * 7、 null,null,null
-   *
-   * @param items
-   */
   @Override
   public void write(Object... items) {
-    if (writers.isEmpty()) {
-      throw new IllegalArgumentException("未初始化header");
-    }
+    initWriter();
     Objects.requireNonNull(items);
     FnRow row = allocateFnRow();
     int i = 0;
@@ -139,6 +135,8 @@ public final class FnSheetImpl implements FnSheet {
         } else {
           throw new ExcelException("not support type " + item.getClass());
         }
+      } else {
+        writer.write(row, null);
       }
       i++;
     }

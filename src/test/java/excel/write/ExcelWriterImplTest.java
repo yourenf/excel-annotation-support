@@ -26,7 +26,7 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
     for (int i = 0; i < 1000; i++) {
       HM hm = new HM(i + "a");
       HM hm2 = new HM(i + "b");
-      int write = writer.write(hm, hm2);
+      int write = writer.write(null, hm2);
     }
     List<File> files = writer.getFiles();
     for (File file : files) {

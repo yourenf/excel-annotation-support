@@ -84,11 +84,12 @@ public class CopyRowWriter implements RowWriter<Row> {
   @Override
   public void write(FnRow row, Row copyFromRow) {
     for (int i = 0; i < colSize; i++) {
-      Cell copyFromCell = copyFromRow.getCell(i);
       Cell newCell = row.allocateCell();
-      if (Objects.isNull(copyFromCell)) {
-        newCell.setBlank();
-      } else {
+      if (Objects.isNull(copyFromRow)) {
+        continue;
+      }
+      Cell copyFromCell = copyFromRow.getCell(i);
+      if (Objects.nonNull(copyFromCell)) {
         switch (copyFromCell.getCellType()) {
           case STRING:
             newCell.setCellValue(copyFromCell.getStringCellValue());
