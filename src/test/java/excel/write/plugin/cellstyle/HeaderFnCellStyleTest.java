@@ -3,6 +3,7 @@ package excel.write.plugin.cellstyle;
 import org.junit.Test;
 
 import java.awt.*;
+import java.io.File;
 
 public class HeaderFnCellStyleTest {
 
@@ -16,5 +17,24 @@ public class HeaderFnCellStyleTest {
     System.out.println(color.getGreen());
     System.out.println(color.getBlue());
     System.out.println((short) color.getBlue());
+  }
+
+
+  public static void main(String[] args) {
+    String JAVA_IO_TMPDIR = "java.io.tmpdir";
+
+    String POIFILES = "poifiles";
+
+
+    String tmpDir = System.getProperty(JAVA_IO_TMPDIR);
+    System.out.println(tmpDir);
+    if (tmpDir == null) {
+      throw new RuntimeException(
+              "Systems temporary directory not defined - set the -D" + JAVA_IO_TMPDIR + " jvm property!");
+    }
+    File directory = new File(tmpDir, POIFILES);
+    if (!directory.exists()) {
+//        syncCreatePOIFilesDirectory(directory);
+    }
   }
 }

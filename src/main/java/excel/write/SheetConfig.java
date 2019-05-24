@@ -10,10 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 public class SheetConfig {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SheetConfig.class);
+  private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
+  private static final String RESULT_DIR = "fn_excel";
   private Path dir;
   /**
    * 允许写入最大的rowNum
@@ -31,7 +32,7 @@ public class SheetConfig {
   private SheetConfig(Builder builder) {
     this.filename = NameSequence.full(builder.fileName, builder.excelType.getSuffix());
     this.sheetName = NameSequence.prefix(builder.sheetName);
-    dir = checkDir(builder.dir);
+    this.dir = getWorkSpace();
     this.limit = builder.limit;
     this.excelType = builder.excelType;
     this.writeType = builder.writeType;
@@ -65,46 +66,34 @@ public class SheetConfig {
     return Paths.get(dir.toString(), filename.next()).toFile();
   }
 
+
   /**
    * 检查dir
    * <p>
-   * 如果dir不为空会新建一个子文件夹使用
-   *
-   * @param dir
-   * @return
    */
-  private Path checkDir(String dir) {
-    if (Objects.isNull(dir) || dir.trim().isEmpty()) {
-      throw new ExcelException("存放结果的文件夹不能为空");
+  private Path getWorkSpace() {
+    String tmpDir = System.getProperty(JAVA_IO_TMPDIR);
+    if (tmpDir == null) {
+      throw new ExcelException(
+              "Systems temporary directory not defined - set the -D" + JAVA_IO_TMPDIR + " jvm property!");
     }
-    Path path = Paths.get(dir);
-    if (!path.toFile().exists()) {
-      throw new ExcelException("存放结果的文件夹" + path.toString() + "不存在");
+    Path directory = Paths.get(tmpDir, RESULT_DIR, UUIDUtils.getId());
+    if (!directory.toFile().exists()) {
+      createDir(directory);
     }
-    if (Files.isRegularFile(path)) {
-      throw new ExcelException(path.toString() + "不是文件夹");
-    }
-    if (!Files.isReadable(path)) {
-      throw new ExcelException(path.toString() + "不可读");
-    }
-    if (!Files.isWritable(path)) {
-      throw new ExcelException(path.toString() + "不可写");
-    }
-    try (Stream<Path> list = Files.list(path)) {
-      if (list.count() > 0) {
-        String uuid = UUIDUtils.getId();
-        log.info("[{}]不为空,将在该目录下创建[{}]目录并使用该目录", dir, uuid);
-        return Paths.get(dir, uuid);
-      } else {
-        return path;
-      }
+    return directory;
+  }
+
+  private synchronized void createDir(Path path) {
+    try {
+      Files.createDirectories(path);
     } catch (IOException e) {
       throw new ExcelException(e);
     }
   }
 
+
   public static final class Builder {
-    private String dir;
     private String fileName;
     /**
      * 默认使用ExcelType limit
@@ -113,11 +102,6 @@ public class SheetConfig {
     private String sheetName = "Sheet";
     private ExcelType excelType = ExcelType.XLSX;
     private WriteType writeType = WriteType.SINGLE_SHEET;
-
-    public Builder dir(String val) {
-      dir = val;
-      return this;
-    }
 
     public Builder fileName(String val) {
       fileName = val;

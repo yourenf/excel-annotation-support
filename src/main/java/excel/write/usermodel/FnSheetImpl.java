@@ -111,7 +111,6 @@ public final class FnSheetImpl implements FnSheet {
     int colOffset = 0;
     List<FnRow> rows = allocateFnRow(height);
     for (RowWriter<?> writer : writers) {
-      writer.init(sheet.getWorkbook(), height);
       writer.writeHeaders(rows);
       writer.getMergeHeaders(rowOffset, colOffset).accept(sheet);
       colOffset += writer.columnSize();

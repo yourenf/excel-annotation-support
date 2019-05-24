@@ -32,6 +32,8 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
 
   @Override
   public void init(Workbook workbook, int maxHeight) {
+    headers.clear();
+    contents.clear();
     List<Property> properties = ObjectResolver.INSTANCE.getProperties(type);
     for (Property property : properties) {
       Column column = property.getAnnotation(Column.class);

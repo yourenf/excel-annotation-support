@@ -12,7 +12,7 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
 
   @Test
   public void write() throws IOException {
-    SheetConfig config = SheetConfig.builder().dir(getBasePath()).fileName("aa").limit(500)
+    SheetConfig config = SheetConfig.builder().fileName("aa").limit(500)
             .writeType(WriteType.SINGLE_SHEET)
             .excelType(ExcelType.XLS)
             .build();
@@ -26,7 +26,7 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
     for (int i = 0; i < 1000; i++) {
       HM hm = new HM(i + "a");
       HM hm2 = new HM(i + "b");
-      int write = writer.write(null, hm2);
+      int write = writer.write(hm, hm2);
     }
     List<File> files = writer.getFiles();
     for (File file : files) {
@@ -38,9 +38,12 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
   public static class HM {
     @Column("a")
     private String name;
+    @Column("a1")
+    private String name2;
 
     public HM(String name) {
       this.name = name;
+      this.name2 = name;
     }
 
     public String getName() {
@@ -49,6 +52,14 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
 
     public void setName(String name) {
       this.name = name;
+    }
+
+    public String getName2() {
+      return name2;
+    }
+
+    public void setName2(String name2) {
+      this.name2 = name2;
     }
   }
 }

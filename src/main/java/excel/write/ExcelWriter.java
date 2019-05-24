@@ -4,9 +4,20 @@ import excel.write.usermodel.FnSheet;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public interface ExcelWriter extends AutoCloseable {
+
+  static ExcelWriter create(String filename) {
+    Objects.requireNonNull(filename);
+    return new ExcelWriterImpl(SheetConfig.builder().fileName(filename).build());
+  }
+
+  static ExcelWriter create(SheetConfig config) {
+    Objects.requireNonNull(config);
+    return new ExcelWriterImpl(config);
+  }
 
   void initHeader(Consumer<FnSheet> header);
 
