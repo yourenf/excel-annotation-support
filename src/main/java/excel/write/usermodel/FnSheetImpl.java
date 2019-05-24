@@ -61,14 +61,14 @@ public final class FnSheetImpl implements FnSheet {
   }
 
   @Override
-  public void addMultiHeader(List<Row> multiHeader) {
+  public void addCopyRowHeader(List<Row> multiHeader) {
     height = Math.max(height, multiHeader.size());
     CopyRowWriter writer = new CopyRowWriter(multiHeader);
     writers.add(writer);
   }
 
   @Override
-  public void addSingleHeader(Row row) {
+  public void addCopyRowHeader(Row row) {
     height = Math.max(height, 1);
     CopyRowWriter writer = new CopyRowWriter(Arrays.asList(row));
     writers.add(writer);

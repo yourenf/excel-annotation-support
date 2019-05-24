@@ -14,10 +14,15 @@ public interface FnSheet {
    */
   int offset();
 
+  /**
+   * @param multiHeader 另一个excel的多行header
+   */
+  void addCopyRowHeader(List<Row> multiHeader);
 
-  void addMultiHeader(List<Row> multiHeader);
-
-  void addSingleHeader(Row row);
+  /**
+   * @param row 另一个excel的单行header
+   */
+  void addCopyRowHeader(Row row);
 
   void addHeader(Class<?> type);
 
