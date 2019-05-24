@@ -13,6 +13,8 @@ import excel.write.usermodel.FnRow;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.awt.*;
+import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -43,7 +45,9 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
       if (Objects.isNull(cellStyle)) {
         header = new FnHeader.HeaderCell(column.order(), column.width(), hs);
       } else {
+        Color color = new Color(cellStyle.rgb());
         FnCellStyle f = ReflectUtil.create(cellStyle.value());
+        f.setColor(color);
         header = new FnHeader.HeaderCell(column.order(), column.width(), hs, f.createCellStyle(workbook));
       }
       headers.add(header);

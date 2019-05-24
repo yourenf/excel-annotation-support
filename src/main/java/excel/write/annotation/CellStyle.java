@@ -12,5 +12,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.TYPE})
 public @interface CellStyle {
+
   Class<? extends FnCellStyle> value() default HeaderFnCellStyle.class;
+
+  /**
+   * @return rgb
+   * @see java.awt.Color(0xFEE699)
+   */
+  int rgb() default 0xFFFFFF;
+
 }

@@ -13,13 +13,10 @@ public class HeaderFnCellStyle extends BorderFnCellStyle {
 
   private IndexedColorMap colorMap = new DefaultIndexedColorMap();
 
-  private final java.awt.Color color;
+  private java.awt.Color color;
 
-  public HeaderFnCellStyle() {
-    color = new java.awt.Color(254, 230, 153);
-  }
-
-  public HeaderFnCellStyle(java.awt.Color color) {
+  @Override
+  public void setColor(java.awt.Color color) {
     this.color = color;
   }
 

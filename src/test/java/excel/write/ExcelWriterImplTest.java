@@ -34,7 +34,7 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
     }
   }
 
-  @CellStyle
+  @CellStyle(rgb = 0xAABBCCdd)
   public static class HM {
     @Column("a")
     private String name;
