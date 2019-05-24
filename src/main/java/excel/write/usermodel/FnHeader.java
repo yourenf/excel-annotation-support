@@ -2,6 +2,7 @@ package excel.write.usermodel;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
 
@@ -17,10 +18,10 @@ public interface FnHeader {
 
 
   class HeaderCell implements FnHeader {
-    private int index;
-    private int width;
-    private List<String> values;
-    private CellStyle cellStyle;
+    private final int index;
+    private final int width;
+    private final List<String> values;
+    private final CellStyle cellStyle;
 
     public HeaderCell(int index, int width, List<String> values) {
       this(index, width, values, null);
@@ -31,6 +32,7 @@ public interface FnHeader {
       this.width = width;
       this.values = values;
       this.cellStyle = cellStyle;
+
     }
 
     @Override
@@ -49,13 +51,17 @@ public interface FnHeader {
         String value = values.get(i);
         FnRow row = rows.get(i);
         Cell cell = row.allocateCell();
-        if (width > 0) {
-          int columnIndex = row.offset() - 1;
-          cell.getRow().getSheet().setColumnWidth(columnIndex, width);
-        }
         cell.setCellValue(value);
         if (cellStyle != null) {
           cell.setCellStyle(cellStyle);
+        }
+
+        int columnIndex = row.offset() - 1;
+        Sheet sheet = cell.getRow().getSheet();
+        if (width > 0) {
+          sheet.setColumnWidth(columnIndex, width);
+        } else {
+          sheet.autoSizeColumn(columnIndex);
         }
       }
 

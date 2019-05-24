@@ -36,9 +36,9 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
 
   @CellStyle(rgb = 0xAABBCCdd)
   public static class HM {
-    @Column("a")
+    @Column("我的的的的额的额")
     private String name;
-    @Column("a1")
+    @Column("i am header")
     private String name2;
 
     public HM(String name) {
