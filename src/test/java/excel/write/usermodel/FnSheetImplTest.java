@@ -60,7 +60,7 @@ public class FnSheetImplTest extends AbstractCommonPath {
   private FnSheet create(XSSFSheet sheet, List<Row> headers) {
     FnSheetImpl fnSheet = new FnSheetImpl(sheet);
 
-    fnSheet.addMultiHeader(headers);
+    fnSheet.addCopyRowHeader(headers);
     fnSheet.addHeader(Model.class);
     fnSheet.addHeader(Model2.class);
     fnSheet.writeHeader();
