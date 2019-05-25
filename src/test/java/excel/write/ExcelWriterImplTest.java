@@ -5,16 +5,15 @@ import excel.write.annotation.Column;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class ExcelWriterImplTest extends AbstractCommonPath {
 
   @Test
-  public void write() throws IOException {
+  public void write() {
     SheetConfig config = SheetConfig.builder().fileName("aa").limit(500)
             .writeType(WriteType.SINGLE_SHEET)
-            .excelType(ExcelType.XLS)
+            .excelType(ExcelType.XLSX)
             .build();
     ExcelWriterImpl writer = new ExcelWriterImpl(config);
     writer.initHeader(fnSheet -> {
@@ -36,10 +35,13 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
 
   @CellStyle(rgb = 0xAABBCCdd)
   public static class HM {
-    @Column("我的的的的额的额")
+    @Column({"我的的的的额的额", "a"})
     private String name;
-    @Column("i am header")
+    @Column({"我的的的的额的额", "i am header"})
     private String name2;
+
+    public HM() {
+    }
 
     public HM(String name) {
       this.name = name;

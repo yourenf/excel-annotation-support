@@ -3,6 +3,7 @@ package excel.write.usermodel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 
 import java.util.List;
 
@@ -61,7 +62,12 @@ public interface FnHeader {
         if (width > 0) {
           sheet.setColumnWidth(columnIndex, width);
         } else {
-          sheet.autoSizeColumn(columnIndex);
+          if (sheet instanceof SXSSFSheet) {
+            ((SXSSFSheet) sheet).trackColumnForAutoSizing(columnIndex);
+            sheet.autoSizeColumn(columnIndex, true);
+          } else {
+            sheet.autoSizeColumn(columnIndex, true);
+          }
         }
       }
 
