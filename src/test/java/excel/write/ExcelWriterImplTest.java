@@ -33,11 +33,11 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
     }
   }
 
-  @CellStyle(rgb = 0xAABBCCdd)
+  @CellStyle(rgb = 0xAAFFCCdd)
   public static class HM {
-    @Column({"我的的的的额的额", "a"})
+    @Column(value = {"我的的的的额的额", "我的的的的额的额", "a"}, order = 1)
     private String name;
-    @Column({"我的的的的额的额", "i am header"})
+    @Column(value = {"我的的的的额的额", "我的的的的额的额", "b"}, order = 2)
     private String name2;
 
     public HM() {
