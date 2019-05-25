@@ -13,13 +13,15 @@ public class ExportModel {
   //设置header文字，自动合并单元格
   @Column(value = {"这是一个Header", "这是一个Header", "a"}, order = 1)
   private String name;
+  //这个配置将会覆盖类上的配置
+  @CellStyle(rgb = 0xDDFFCCdd)
   @Column(value = {"这是一个Header", "这是一个Header", "b"}, order = 2)
   private String name2;
 
   public ExportModel() {
   }
 
-  public HM(String name) {
+  public ExportModel(String name) {
     this.name = name;
     this.name2 = name;
   }
