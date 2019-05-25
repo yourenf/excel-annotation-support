@@ -49,13 +49,18 @@ public class ExcelWriterImplTest {
   @Test
   public void write() {
     SheetConfig config = SheetConfig.builder()
-            //自定义导出文件名
+            //自定义导出文件名 
+            //如果生成多个文件 文件名将会是 aa01、aa02 ...
             .fileName("aa")
+            //自定义Sheet名  
+            .sheetName("aa")
             //每个sheet可写入多少行 受限于不同Excel版本允许写入最大行数
+            //默认2003:2<<15,2007 2<<19
             .limit(500)
-            //一个WorkBook创建几个Sheet
+            //一个WorkBook创建几个Sheet 
+            // 默认一个workbook一个sheet
             .writeType(WriteType.SINGLE_SHEET)
-            //创建excel 2007 还是excel 2003
+            //设置2007或2003，默认2007
             .excelType(ExcelType.XLSX)
             .build();
     ExcelWriter writer = ExcelWriter.create(config);
