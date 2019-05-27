@@ -2,22 +2,17 @@ package excel.write.plugin.row;
 
 import excel.write.usermodel.FnRow;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public interface RowWriter<T> {
 
-  default boolean support(Class<?> type) {
-    return getType().isAssignableFrom(type);
-  }
-
   /**
-   * @param workbook
+   * @param sheet
    * @param headerAlignNum 补全header到 headerAlignNum
    */
-  void init(Workbook workbook, int headerAlignNum);
+  void init(Sheet sheet, int headerAlignNum);
 
   /**
    * @return column  size
@@ -27,7 +22,7 @@ public interface RowWriter<T> {
   /**
    * @return support type
    */
-  Class<?> getType();
+  boolean support(Class<?> type);
 
   void writeHeaders(List<FnRow> rows);
 

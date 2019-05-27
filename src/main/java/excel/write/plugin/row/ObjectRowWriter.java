@@ -11,7 +11,6 @@ import excel.write.usermodel.FnCell;
 import excel.write.usermodel.FnHeader;
 import excel.write.usermodel.FnRow;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.awt.*;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
   }
 
   @Override
-  public void init(Workbook workbook, int maxHeight) {
+  public void init(Sheet sheet, int maxHeight) {
     headers.clear();
     contents.clear();
     List<Property> properties = ObjectResolver.INSTANCE.getProperties(type);
@@ -50,7 +49,7 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
         Color color = new Color(cellStyle.rgb());
         FnCellStyle f = ReflectUtil.create(cellStyle.value());
         f.setColor(color);
-        header = new FnHeader.HeaderCell(column.order(), column.width(), hs, f.createCellStyle(workbook));
+        header = new FnHeader.HeaderCell(column.order(), column.width(), hs, f.createCellStyle(sheet.getWorkbook()));
       }
       headers.add(header);
       TypeHandler<?> typeHandler = ReflectUtil.create(column.typeHandler());
@@ -78,8 +77,8 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
   }
 
   @Override
-  public Class<?> getType() {
-    return type;
+  public boolean support(Class<?> type) {
+    return this.type.isAssignableFrom(type);
   }
 
   @Override
@@ -92,7 +91,7 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
   @Override
   public Consumer<Sheet> getMergeHeaders(int rowOffset, int colOffset) {
     List<List<String>> collect = headers.stream().map(FnHeader::values).collect(Collectors.toList());
-    ObjectHeader header = new ObjectHeader(collect);
+    ObjectHeader header = new ObjectHeader(collect, true);
     return header.getMergeHeaders(rowOffset, colOffset);
   }
 

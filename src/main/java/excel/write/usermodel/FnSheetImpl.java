@@ -81,7 +81,7 @@ public final class FnSheetImpl implements FnSheet {
             .map(r -> r.getAnnotation(Column.class))
             .filter(Objects::nonNull).collect(Collectors.toList());
     if (collect.isEmpty()) {
-      throw new ExcelException(type + " 没有找到 excel.write.annotation.Column 注解");
+      throw new ExcelException(type + " 没有找到 " + excel.write.annotation.Column.class.toString() + " 注解");
     }
     int h = collect.stream()
             .mapToInt(column -> column.value().length)
@@ -100,7 +100,7 @@ public final class FnSheetImpl implements FnSheet {
       throw new IllegalArgumentException("未添加header");
     }
     for (RowWriter<?> writer : writers) {
-      writer.init(sheet.getWorkbook(), height);
+      writer.init(sheet, height);
     }
   }
 

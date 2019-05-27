@@ -5,6 +5,7 @@ import excel.write.internal.HeaderArea;
 import excel.write.internal.Matrix;
 import excel.write.internal.Region;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,10 +19,6 @@ public class ObjectHeader {
 
   private List<List<String>> headers;
   private boolean transpose;
-
-  public ObjectHeader(List<List<String>> headers) {
-    this(headers, true);
-  }
 
   /**
    * 说明  每一行是一个List<String>
@@ -53,6 +50,15 @@ public class ObjectHeader {
   }
 
   public Consumer<Sheet> getMergeHeaders(int rowOffset, int colOffset) {
+    List<CellRangeAddress> list = getHeaderCellRangeAddress(rowOffset, colOffset);
+    return sheet -> {
+      for (CellRangeAddress address : list) {
+        sheet.addMergedRegionUnsafe(address);
+      }
+    };
+  }
+
+  private List<CellRangeAddress> getHeaderCellRangeAddress(int rowOffset, int colOffset) {
     Matrix grid;
     if (transpose) {
       grid = create(headers).transpose();
@@ -63,21 +69,22 @@ public class ObjectHeader {
     Map<Integer, String> map = new HashMap<>();
     relations.forEach((k, v) -> map.put(v, k));
     List<Area> areas = headerArea.getAreas();
-    return sheet -> {
-      for (Area area : areas) {
-        Region region = area.getRegion();
-        Matrix matrix = headerArea.getSubMatrix(region);
-        Set<Integer> set = new HashSet<>();
-        matrix.forEach(i -> set.add(i));
-        if (set.size() > 1) {
-          String error = error(matrix, map);
-          throw new IllegalArgumentException("不能合并单元格" + error);
-        }
-        region.getCellRangeAddress(rowOffset, colOffset)
-                .ifPresent(r -> sheet.addMergedRegionUnsafe(r));
+    List<CellRangeAddress> cellRangeAddresses = new ArrayList<>(areas.size());
+    for (Area area : areas) {
+      Region region = area.getRegion();
+      Matrix matrix = headerArea.getSubMatrix(region);
+      Set<Integer> set = new HashSet<>();
+      matrix.forEach(i -> set.add(i));
+      if (set.size() > 1) {
+        String error = error(matrix, map);
+        throw new IllegalArgumentException("不能合并单元格" + error);
       }
-    };
+      region.getCellRangeAddress(rowOffset, colOffset)
+              .ifPresent(r -> cellRangeAddresses.add(r));
+    }
+    return cellRangeAddresses;
   }
+
 
   private String error(Matrix matrix, Map<Integer, String> relations) {
     StringBuilder s = new StringBuilder(matrix.getRowDimension() * matrix.getColumnDimension() * 10);

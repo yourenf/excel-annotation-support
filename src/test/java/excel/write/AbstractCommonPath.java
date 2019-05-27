@@ -18,7 +18,6 @@ public abstract class AbstractCommonPath {
     ClassLoader classLoader = getClass().getClassLoader();
     URI fn = classLoader.getResource("excel").toURI();
     Path resource = Paths.get(fn).getParent();
-    System.out.println(resource);
     String dir = Paths.get(resource.toString(), "test-file").toString();
     if (System.getProperty("os.name").startsWith("Windows")) {
       dir = dir.substring(1);
