@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ExcelWriterImpl implements ExcelWriter {
-  private SheetConfig config;
+  private ExcelConfig config;
   private boolean closed = false;
   private boolean init = false;
   private Consumer<FnSheet> header;
   private Workbook workbook = null;
   private FnSheet fnSheet = null;
 
-  public ExcelWriterImpl(SheetConfig config) {
+  public ExcelWriterImpl(ExcelConfig config) {
     this.config = config;
   }
 

@@ -11,8 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-public class SheetConfig {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SheetConfig.class);
+public final class ExcelConfig {
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ExcelConfig.class);
   private static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
   private static final String RESULT_DIR = "fn_excel";
   private Path dir;
@@ -29,7 +29,7 @@ public class SheetConfig {
     return new Builder();
   }
 
-  private SheetConfig(Builder builder) {
+  private ExcelConfig(Builder builder) {
     this.filename = NameSequence.full(builder.fileName, builder.excelType.getSuffix());
     this.sheetName = NameSequence.prefix(builder.sheetName);
     this.dir = getWorkSpace();
@@ -129,9 +129,9 @@ public class SheetConfig {
     }
 
 
-    public SheetConfig build() {
+    public ExcelConfig build() {
       Objects.requireNonNull(fileName, "文件名称不能为空");
-      return new SheetConfig(this);
+      return new ExcelConfig(this);
     }
   }
 }
