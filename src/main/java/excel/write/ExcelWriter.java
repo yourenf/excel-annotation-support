@@ -11,10 +11,10 @@ public interface ExcelWriter extends AutoCloseable {
 
   static ExcelWriter create(String filename) {
     Objects.requireNonNull(filename);
-    return new ExcelWriterImpl(SheetConfig.builder().fileName(filename).build());
+    return new ExcelWriterImpl(ExcelConfig.builder().fileName(filename).build());
   }
 
-  static ExcelWriter create(SheetConfig config) {
+  static ExcelWriter create(ExcelConfig config) {
     Objects.requireNonNull(config);
     return new ExcelWriterImpl(config);
   }

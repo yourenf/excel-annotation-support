@@ -11,7 +11,7 @@ public class ExcelWriterImplTest extends AbstractCommonPath {
 
   @Test
   public void write() {
-    SheetConfig config = SheetConfig.builder()
+    ExcelConfig config = ExcelConfig.builder()
             //自定义导出文件名
             //如果生成多个文件 文件名将会是 aa01、aa02 ...
             .fileName("aa")
