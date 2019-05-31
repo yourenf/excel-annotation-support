@@ -53,6 +53,7 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
       }
       headers.add(header);
       TypeHandler<?> typeHandler = ReflectUtil.create(column.typeHandler());
+      typeHandler.initCellStyle(sheet.getWorkbook());
       FnCell<T> contentCell = new FnCell.ContentCell(column.order(), typeHandler, property.getReadMethod());
       contents.add(contentCell);
     }
@@ -97,8 +98,8 @@ public class ObjectRowWriter<T> implements RowWriter<T> {
 
   @Override
   public void write(FnRow row, T item) {
-    for (FnCell<T> header : contents) {
-      header.accept(row, item);
+    for (FnCell<T> cell : contents) {
+      cell.accept(row, item);
     }
   }
 }

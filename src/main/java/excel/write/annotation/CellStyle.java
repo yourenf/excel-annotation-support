@@ -18,7 +18,8 @@ public @interface CellStyle {
   /**
    * @return rgb
    * @see java.awt.Color(0xFEE699)
+   * @see excel.write.plugin.cellstyle.FnCellStyle#setColor
    */
-  int rgb() default 0xFFFFFF;
+  int rgb() default 0xFEE699;
 
 }
