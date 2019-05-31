@@ -34,8 +34,8 @@ public enum ObjectResolver {
       List<Property> properties = new ArrayList<>(fields.length);
       PropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(clazz)
               .getPropertyDescriptors();
-      for (PropertyDescriptor descriptor : propertyDescriptors) {
-        for (Field field : fields) {
+      for (Field field : fields) {
+        for (PropertyDescriptor descriptor : propertyDescriptors) {
           if (field.getName().equalsIgnoreCase(descriptor.getName())) {
             Property property = new Property(field, descriptor);
             properties.add(property);
