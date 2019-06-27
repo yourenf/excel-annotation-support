@@ -98,6 +98,9 @@ public class ExcelWriterImpl implements ExcelWriter {
       return;
     }
     closed = true;
+    if (!init) {
+      init();
+    }
     File file = config.getNewFile();
     try (OutputStream os = new FileOutputStream(file)) {
       workbook.write(os);
